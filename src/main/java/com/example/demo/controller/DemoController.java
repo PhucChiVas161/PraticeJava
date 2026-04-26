@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.User;
 import com.example.demo.service.DemoServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,7 @@ public class DemoController {
     // CRUD Endpoints for User
 
     // Create User
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/users")
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody User user) {
         User createdUser = demoServices.createUser(user);
@@ -67,6 +69,7 @@ public class DemoController {
     }
 
     // Get All Users
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<Map<String, Object>> getAllUsers() {
         List<User> users = demoServices.getAllUsers();
@@ -78,6 +81,7 @@ public class DemoController {
     }
 
     // Get User by ID
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable("id") Long id) {
         Optional<User> user = demoServices.getUserById(id);
@@ -94,6 +98,7 @@ public class DemoController {
     }
 
     // Get Users by Name
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/users/search")
     public ResponseEntity<Map<String, Object>> getUsersByName(@RequestParam("name") String name) {
         List<User> users = demoServices.getUsersByName(name);
@@ -105,6 +110,7 @@ public class DemoController {
     }
 
     // Update User
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/users/{id}")
     public ResponseEntity<Map<String, Object>> updateUser(@PathVariable("id") Long id, @RequestBody User userDetails) {
         User updatedUser = demoServices.updateUser(id, userDetails);
@@ -122,6 +128,7 @@ public class DemoController {
     }
 
     // Delete User
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable("id") Long id) {
         boolean deleted = demoServices.deleteUser(id);
@@ -138,6 +145,7 @@ public class DemoController {
     }
 
     // Initialize Demo Data
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/init-demo-data")
     public ResponseEntity<Map<String, Object>> initDemoData() {
         demoServices.initializeDemoData();

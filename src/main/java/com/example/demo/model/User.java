@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,9 @@ public class User {
     private String name;
     private String email;
     private int age;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    private String role;
 
     // Default constructor
     public User() {
@@ -25,6 +29,14 @@ public class User {
         this.name = name;
         this.email = email;
         this.age = age;
+    }
+
+    public User(String name, String email, int age, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.password = password;
+        this.role = role;
     }
 
     // Getters and Setters
@@ -60,6 +72,22 @@ public class User {
         this.age = age;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -67,6 +95,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,6 +16,9 @@ public class DemoServices {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public String getServiceMessage() {
         return "This is a message from the DemoServices class.";
@@ -34,6 +38,14 @@ public class DemoServices {
 
     // Create
     public User createUser(User user) {
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("USER");
+        }
+
         return userRepository.save(user);
     }
 
@@ -53,7 +65,7 @@ public class DemoServices {
     }
 
     // Read - Get user by email
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -65,6 +77,15 @@ public class DemoServices {
             user.setName(userDetails.getName());
             user.setEmail(userDetails.getEmail());
             user.setAge(userDetails.getAge());
+
+            if (userDetails.getPassword() != null && !userDetails.getPassword().isBlank()) {
+                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            }
+
+            if (userDetails.getRole() != null && !userDetails.getRole().isBlank()) {
+                user.setRole(userDetails.getRole());
+            }
+
             return userRepository.save(user);
         }
         return null;
@@ -82,9 +103,9 @@ public class DemoServices {
     // Initialize demo data
     public void initializeDemoData() {
         // if (userRepository.count() == 0) {
-        userRepository.save(new User("John Doe", "john@example.com", 30));
-        userRepository.save(new User("Jane Smith", "jane@example.com", 25));
-        userRepository.save(new User("Bob Johnson", "bob@example.com", 35));
+        userRepository.save(new User("John Doe", "john@example.com", 30, passwordEncoder.encode("123456"), "USER"));
+        userRepository.save(new User("Jane Smith", "jane@example.com", 25, passwordEncoder.encode("123456"), "USER"));
+        userRepository.save(new User("Bob Johnson", "bob@example.com", 35, passwordEncoder.encode("123456"), "ADMIN"));
         // }
     }
 }
