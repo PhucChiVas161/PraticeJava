@@ -1,11 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.model.MenuCategory;
+import com.example.demo.model.MenuItem;
+import com.example.demo.model.Restaurant;
+import com.example.demo.model.RestaurantTable;
 import com.example.demo.model.User;
+import com.example.demo.repository.MenuCategoryRepository;
+import com.example.demo.repository.MenuItemRepository;
+import com.example.demo.repository.RestaurantRepository;
+import com.example.demo.repository.RestaurantTableRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +28,18 @@ public class DemoServices {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private RestaurantTableRepository restaurantTableRepository;
+
+    @Autowired
+    private MenuCategoryRepository menuCategoryRepository;
+
+    @Autowired
+    private MenuItemRepository menuItemRepository;
 
     public String getServiceMessage() {
         return "This is a message from the DemoServices class.";
@@ -102,10 +123,101 @@ public class DemoServices {
 
     // Initialize demo data
     public void initializeDemoData() {
-        // if (userRepository.count() == 0) {
-        userRepository.save(new User("John Doe", "john@example.com", 30, passwordEncoder.encode("123456"), "USER"));
-        userRepository.save(new User("Jane Smith", "jane@example.com", 25, passwordEncoder.encode("123456"), "USER"));
-        userRepository.save(new User("Bob Johnson", "bob@example.com", 35, passwordEncoder.encode("123456"), "ADMIN"));
-        // }
+        if (userRepository.count() == 0) {
+            userRepository.save(new User("John Doe", "john@example.com", 30, passwordEncoder.encode("123456"),
+                    "USER"));
+            userRepository.save(new User("Jane Smith", "jane@example.com", 25, passwordEncoder.encode("123456"),
+                    "USER"));
+            userRepository.save(new User("Bob Johnson", "bob@example.com", 35, passwordEncoder.encode("123456"),
+                    "ADMIN"));
+        }
+
+        if (restaurantRepository.findByRestaurantCode("ABC123").isPresent()) {
+            return;
+        }
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("Demo Bistro");
+        restaurant.setRestaurantCode("ABC123");
+        restaurant = restaurantRepository.save(restaurant);
+
+        RestaurantTable table1 = new RestaurantTable();
+        table1.setRestaurant(restaurant);
+        table1.setTableNumber(1);
+        table1.setLabel("Window");
+
+        RestaurantTable table2 = new RestaurantTable();
+        table2.setRestaurant(restaurant);
+        table2.setTableNumber(2);
+        table2.setLabel("Patio");
+
+        RestaurantTable table3 = new RestaurantTable();
+        table3.setRestaurant(restaurant);
+        table3.setTableNumber(3);
+        table3.setLabel("Booth");
+
+        restaurantTableRepository.saveAll(List.of(table1, table2, table3));
+
+        MenuCategory mains = new MenuCategory();
+        mains.setRestaurant(restaurant);
+        mains.setName("Mains");
+        mains.setSortOrder(1);
+        mains.setActive(true);
+
+        MenuCategory drinks = new MenuCategory();
+        drinks.setRestaurant(restaurant);
+        drinks.setName("Drinks");
+        drinks.setSortOrder(2);
+        drinks.setActive(true);
+
+        MenuCategory desserts = new MenuCategory();
+        desserts.setRestaurant(restaurant);
+        desserts.setName("Desserts");
+        desserts.setSortOrder(3);
+        desserts.setActive(true);
+
+        menuCategoryRepository.saveAll(List.of(mains, drinks, desserts));
+
+        MenuItem pasta = new MenuItem();
+        pasta.setRestaurant(restaurant);
+        pasta.setCategory(mains);
+        pasta.setName("Herb Pasta");
+        pasta.setDescription("Garlic herb pasta with parmesan");
+        pasta.setPrice(new BigDecimal("12.50"));
+        pasta.setAvailable(true);
+
+        MenuItem steak = new MenuItem();
+        steak.setRestaurant(restaurant);
+        steak.setCategory(mains);
+        steak.setName("Grilled Steak");
+        steak.setDescription("8oz steak with chimichurri");
+        steak.setPrice(new BigDecimal("18.00"));
+        steak.setAvailable(true);
+
+        MenuItem lemonade = new MenuItem();
+        lemonade.setRestaurant(restaurant);
+        lemonade.setCategory(drinks);
+        lemonade.setName("Lemonade");
+        lemonade.setDescription("Fresh lemon with mint");
+        lemonade.setPrice(new BigDecimal("4.50"));
+        lemonade.setAvailable(true);
+
+        MenuItem espresso = new MenuItem();
+        espresso.setRestaurant(restaurant);
+        espresso.setCategory(drinks);
+        espresso.setName("Espresso");
+        espresso.setDescription("Single origin espresso shot");
+        espresso.setPrice(new BigDecimal("3.00"));
+        espresso.setAvailable(true);
+
+        MenuItem cheesecake = new MenuItem();
+        cheesecake.setRestaurant(restaurant);
+        cheesecake.setCategory(desserts);
+        cheesecake.setName("Cheesecake");
+        cheesecake.setDescription("Vanilla cheesecake with berry compote");
+        cheesecake.setPrice(new BigDecimal("6.50"));
+        cheesecake.setAvailable(true);
+
+        menuItemRepository.saveAll(List.of(pasta, steak, lemonade, espresso, cheesecake));
     }
 }
