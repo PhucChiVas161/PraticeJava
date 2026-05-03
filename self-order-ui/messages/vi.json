@@ -1,0 +1,79 @@
+{
+    "common": {
+        "loading": "Đang tải...",
+        "error": "Lỗi",
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "delete": "Xóa",
+        "edit": "Sửa",
+        "confirm": "Xác nhận",
+        "back": "Quay lại",
+        "next": "Tiếp theo",
+        "previous": "Trước đó"
+    },
+    "nav": {
+        "home": "Trang chủ",
+        "menu": "Thực đơn",
+        "order": "Đặt món",
+        "kitchen": "Bếp",
+        "waiter": "Phục vụ",
+        "admin": "Quản trị"
+    },
+    "order": {
+        "title": "Đặt món",
+        "table": "Bàn",
+        "items": "Món",
+        "total": "Tổng cộng",
+        "submit": "Gửi đơn hàng",
+        "success": "Đặt món thành công!",
+        "status": {
+            "NEW": "Mới",
+            "CONFIRMED": "Đã xác nhận",
+            "PREPARING": "Đang chế biến",
+            "READY": "Sẵn sàng",
+            "SERVED": "Đã phục vụ",
+            "PAID": "Đã thanh toán",
+            "CANCELED": "Đã hủy"
+        }
+    },
+    "kitchen": {
+        "title": "Bếp",
+        "subtitle": "Đơn hàng trực tiếp",
+        "restaurantCode": "Mã nhà hàng",
+        "waiting": "Đang chờ đơn hàng mới...",
+        "connecting": "Đang kết nối đến bếp...",
+        "addRestaurantCode": "Thêm restaurantCode vào URL để kết nối đơn hàng trực tiếp.",
+        "unableToConnect": "Không thể kết nối",
+        "table": "Bàn",
+        "items": "món",
+        "total": "Tổng",
+        "moveTo": "Chuyển sang",
+        "statusLocked": "Đã khóa trạng thái"
+    },
+    "waiter": {
+        "title": "Phục vụ",
+        "subtitle": "Quản lý phục vụ",
+        "restaurantCode": "Mã nhà hàng",
+        "pendingConfirmation": "Chờ xác nhận",
+        "readyToServe": "Sẵn sàng phục vụ",
+        "allOrders": "Tất cả đơn hàng",
+        "noPending": "Không có đơn hàng nào chờ xác nhận",
+        "noReady": "Không có món nào sẵn sàng để phục vụ",
+        "noOrders": "Chưa có đơn hàng nào",
+        "confirmOrder": "Xác nhận đơn hàng",
+        "markAsServed": "Xác nhận đã phục vụ",
+        "status": {
+            "NEW": "Chờ xác nhận",
+            "CONFIRMED": "Đã xác nhận - Bếp nhận món",
+            "PREPARING": "Đang chế biến",
+            "READY": "Sẵn sàng - Chờ bưng món",
+            "SERVED": "Đã phục vụ",
+            "PAID": "Đã thanh toán",
+            "CANCELED": "Đã hủy"
+        }
+    },
+    "language": {
+        "switchToEnglish": "English",
+        "switchToVietnamese": "Tiếng Việt"
+    }
+}

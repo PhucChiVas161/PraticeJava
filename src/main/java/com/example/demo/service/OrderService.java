@@ -78,7 +78,7 @@ public class OrderService {
         Order order = new Order();
         order.setRestaurant(restaurant);
         order.setRestaurantTable(table);
-        order.setStatus(OrderStatus.CONFIRMED);
+        order.setStatus(OrderStatus.NEW);
         order.setIdempotencyKey(request.idempotencyKey());
         order.setTotalAmount(total);
 

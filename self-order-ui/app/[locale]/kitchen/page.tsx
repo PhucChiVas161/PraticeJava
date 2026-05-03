@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { apiGet, apiPut } from "@/lib/api";
 import { createStompClient, parseStompMessage } from "@/lib/websocket";
 import type { MenuResponse, OrderResponse, OrderStatus } from "@/lib/types";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const nextStatusMap: Record<OrderStatus, OrderStatus | null> = {
     NEW: "CONFIRMED",
@@ -21,10 +23,20 @@ const statusTone: Record<OrderStatus, string> = {
     NEW: "bg-[#fff7ef] text-[#6b5f57]",
     CONFIRMED: "bg-[#1b1a17] text-white",
     PREPARING: "bg-[#ff6b35] text-white",
-    READY: "bg-[#265d97] text-white",
+    READY: "bg-[#265d97] text-white animate-pulse",
     SERVED: "bg-[#1f7a4a] text-white",
     PAID: "bg-[#4b4453] text-white",
     CANCELED: "bg-[#b00020] text-white",
+};
+
+const statusLabel: Record<OrderStatus, string> = {
+    NEW: "Mới",
+    CONFIRMED: "Đã xác nhận",
+    PREPARING: "Đang chế biến",
+    READY: "Sẵn sàng - Đã báo phục vụ",
+    SERVED: "Đã phục vụ",
+    PAID: "Đã thanh toán",
+    CANCELED: "Đã hủy",
 };
 
 function formatMoney(value: string | number) {
@@ -38,6 +50,8 @@ function formatMoney(value: string | number) {
 export default function KitchenPage() {
     const searchParams = useSearchParams();
     const restaurantCode = searchParams.get("restaurantCode") ?? "";
+    const t = useTranslations("kitchen");
+    const tOrder = useTranslations("order");
 
     const [orders, setOrders] = useState<OrderResponse[]>([]);
 
@@ -92,23 +106,26 @@ export default function KitchenPage() {
     return (
         <div className="page-gradient flex min-h-screen flex-col">
             <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-6 py-10">
-                <header className="flex flex-col gap-2">
+                <header className="flex flex-col gap-2 relative">
                     <span className="text-xs uppercase tracking-[0.3em] text-[#6b5f57]">Kitchen console</span>
-                    <h1 className="font-display text-3xl text-[#1b1a17]">Live orders</h1>
-                    <p className="text-sm text-[#6b5f57]">Restaurant code: {restaurantCode || "--"}</p>
+                    <h1 className="font-display text-3xl text-[#1b1a17]">{t("title")}</h1>
+                    <p className="text-sm text-[#6b5f57]">{t("restaurantCode")}: {restaurantCode || "--"}</p>
+                    <div className="absolute top-0 right-0">
+                        <LanguageSwitcher />
+                    </div>
                 </header>
 
                 {!restaurantCode ? (
                     <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">
-                        Add <strong>restaurantCode</strong> in the URL to connect to live orders.
+                        {t("addRestaurantCode")}
                     </div>
                 ) : menuQuery.isLoading ? (
                     <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">
-                        Connecting to the kitchen feed...
+                        {t("connecting")}
                     </div>
                 ) : menuQuery.error ? (
                     <div className="glass-panel rounded-2xl border border-red-200 p-6 text-sm text-red-700">
-                        {menuQuery.error instanceof Error ? menuQuery.error.message : "Unable to connect"}
+                        {menuQuery.error instanceof Error ? menuQuery.error.message : t("unableToConnect")}
                     </div>
                 ) : (
                     <div className="grid gap-4 lg:grid-cols-2">
@@ -125,7 +142,7 @@ export default function KitchenPage() {
                                             <div>
                                                 <h2 className="font-display text-xl">Order #{order.id}</h2>
                                                 <p className="text-xs text-[#6b5f57]">
-                                                    Table {order.tableId} • {order.items.length} items
+                                                    Bàn {order.tableId} • {order.items.length} món
                                                 </p>
                                             </div>
                                             <span
@@ -133,7 +150,7 @@ export default function KitchenPage() {
                                                     statusTone[order.status]
                                                 }`}
                                             >
-                                                {order.status}
+                                                {statusLabel[order.status] || order.status}
                                             </span>
                                         </div>
 
@@ -152,7 +169,7 @@ export default function KitchenPage() {
 
                                         <div className="mt-4 flex items-center justify-between">
                                             <span className="text-xs text-[#6b5f57]">
-                                                Total {formatMoney(order.totalAmount)}
+                                                Tổng {formatMoney(order.totalAmount)}
                                             </span>
                                             {nextStatus ? (
                                                 <button
@@ -165,10 +182,10 @@ export default function KitchenPage() {
                                                     }
                                                     disabled={updateStatusMutation.isPending}
                                                 >
-                                                    Move to {nextStatus}
+                                                    Chuyển sang {statusLabel[nextStatus] || nextStatus}
                                                 </button>
                                             ) : (
-                                                <span className="text-xs text-[#6b5f57]">Status locked</span>
+                                                <span className="text-xs text-[#6b5f57]">Đã khóa trạng thái</span>
                                             )}
                                         </div>
                                     </div>

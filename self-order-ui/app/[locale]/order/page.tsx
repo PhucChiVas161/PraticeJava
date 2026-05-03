@@ -3,6 +3,7 @@
 import { useMemo, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import {
     type CallRequestType,
     type CreateOrderRequest,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/types";
 import { apiGet, apiPost } from "@/lib/api";
 import { createStompClient, parseStompMessage } from "@/lib/websocket";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const statusLabels: Record<string, string> = {
     NEW: "Order received",
@@ -41,6 +43,8 @@ export default function OrderPage() {
     const restaurantCode = searchParams.get("restaurantCode") ?? "";
     const tableIdValue = searchParams.get("tableId") ?? "";
     const tableId = Number(tableIdValue);
+    const t = useTranslations("order");
+    const tCommon = useTranslations("common");
 
     const [cart, setCart] = useState<Record<string, CartLine>>({});
     const [latestOrder, setLatestOrder] = useState<OrderResponse | null>(null);
@@ -160,12 +164,15 @@ export default function OrderPage() {
         <div className="page-gradient flex min-h-screen flex-col">
             <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-6 py-10 lg:grid lg:grid-cols-[1.2fr_0.8fr]">
                 <section className="flex flex-col gap-6">
-                    <header className="flex flex-col gap-2">
+                    <header className="flex flex-col gap-2 relative">
                         <span className="text-xs uppercase tracking-[0.3em] text-[#6b5f57]">Table service</span>
-                        <h1 className="font-display text-3xl text-[#1b1a17]">Order from your table</h1>
+                        <h1 className="font-display text-3xl text-[#1b1a17]">{t("title")}</h1>
                         <p className="text-sm text-[#6b5f57]">
                             Restaurant: {restaurantCode || "--"} | Table: {tableIdValue || "--"}
                         </p>
+                        <div className="absolute top-0 right-0">
+                            <LanguageSwitcher />
+                        </div>
                     </header>
 
                     {!restaurantCode || !tableId ? (

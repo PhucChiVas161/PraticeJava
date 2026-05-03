@@ -1,0 +1,79 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "confirm": "Confirm",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous"
+    },
+    "nav": {
+        "home": "Home",
+        "menu": "Menu",
+        "order": "Order",
+        "kitchen": "Kitchen",
+        "waiter": "Waiter",
+        "admin": "Admin"
+    },
+    "order": {
+        "title": "Place Order",
+        "table": "Table",
+        "items": "Items",
+        "total": "Total",
+        "submit": "Submit Order",
+        "success": "Order placed successfully!",
+        "status": {
+            "NEW": "New",
+            "CONFIRMED": "Confirmed",
+            "PREPARING": "Preparing",
+            "READY": "Ready",
+            "SERVED": "Served",
+            "PAID": "Paid",
+            "CANCELED": "Canceled"
+        }
+    },
+    "kitchen": {
+        "title": "Kitchen Console",
+        "subtitle": "Live Orders",
+        "restaurantCode": "Restaurant Code",
+        "waiting": "Waiting for new orders...",
+        "connecting": "Connecting to the kitchen feed...",
+        "addRestaurantCode": "Add restaurantCode in the URL to connect to live orders.",
+        "unableToConnect": "Unable to connect",
+        "table": "Table",
+        "items": "items",
+        "total": "Total",
+        "moveTo": "Move to",
+        "statusLocked": "Status locked"
+    },
+    "waiter": {
+        "title": "Waiter Console",
+        "subtitle": "Service Management",
+        "restaurantCode": "Restaurant Code",
+        "pendingConfirmation": "Pending Confirmation",
+        "readyToServe": "Ready to Serve",
+        "allOrders": "All Orders",
+        "noPending": "No orders pending confirmation",
+        "noReady": "No orders ready to serve",
+        "noOrders": "No orders yet",
+        "confirmOrder": "Confirm Order",
+        "markAsServed": "Mark as Served",
+        "status": {
+            "NEW": "Pending Confirmation",
+            "CONFIRMED": "Confirmed - Kitchen Received",
+            "PREPARING": "Preparing",
+            "READY": "Ready - Awaiting Service",
+            "SERVED": "Served",
+            "PAID": "Paid",
+            "CANCELED": "Canceled"
+        }
+    },
+    "language": {
+        "switchToEnglish": "English",
+        "switchToVietnamese": "Tiếng Việt"
+    }
+}

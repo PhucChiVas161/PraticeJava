@@ -22,6 +22,8 @@ export type MenuResponse = {
 
 export type OrderStatus = "NEW" | "CONFIRMED" | "PREPARING" | "READY" | "SERVED" | "PAID" | "CANCELED";
 
+// Waiter specific status flow: NEW -> CONFIRMED (waiter confirms) -> PREPARING -> READY (notify waiter) -> SERVED (waiter delivers)
+
 export type OrderItemStatus = "NEW" | "PREPARING" | "READY" | "SERVED" | "CANCELED";
 
 export type OrderItemResponse = {
