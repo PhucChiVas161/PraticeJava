@@ -19,31 +19,12 @@ const statusTone: Record<OrderStatus, string> = {
     CANCELED: "bg-[#b00020] text-white",
 };
 
-const statusLabel: Record<OrderStatus, string> = {
-    NEW: "Chờ xác nhận",
-    CONFIRMED: "Đã xác nhận - Bếp nhận món",
-    PREPARING: "Đang chế biến",
-    READY: "Sẵn sàng - Chờ bưng món",
-    SERVED: "Đã phục vụ",
-    PAID: "Đã thanh toán",
-    CANCELED: "Đã hủy",
-};
-
-// We'll use translations for the UI, but keep these as fallbacks
-
-function formatMoney(value: string | number) {
-    const amount = typeof value === "string" ? Number(value) : value;
-    return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-    }).format(amount);
-}
-
 export default function WaiterPage() {
     const searchParams = useSearchParams();
     const restaurantCode = searchParams.get("restaurantCode") ?? "";
     const t = useTranslations("waiter");
     const tOrder = useTranslations("order");
+    const tCommon = useTranslations("common");
 
     const [orders, setOrders] = useState<OrderResponse[]>([]);
     const [activeTab, setActiveTab] = useState<"pending" | "ready" | "all">("pending");
@@ -109,18 +90,28 @@ export default function WaiterPage() {
     }, [filteredOrders]);
 
     const getTableName = (tableId: number) => {
-        return `Bàn ${tableId}`;
+        return `${t("table")} ${tableId}`;
     };
+
+    function formatMoney(lineTotal: string | number) {
+        const amount = typeof lineTotal === "string" ? parseFloat(lineTotal) : lineTotal;
+        return new Intl.NumberFormat(tCommon("locale"), {
+            style: "currency",
+            currency: tCommon("currency"),
+        }).format(amount);
+    }
 
     return (
         <div className="min-h-screen bg-linear-to-br from-orange-50 to-amber-50">
             <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
                 <header className="flex flex-col gap-2 relative">
                     <span className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-600">
-                        Waiter Console
+                        {t("subtitle")}
                     </span>
                     <h1 className="font-display text-3xl font-bold text-gray-900">{t("title")}</h1>
-                    <p className="text-sm text-gray-600">{t("restaurantCode")}: {restaurantCode || "--"}</p>
+                    <p className="text-sm text-gray-600">
+                        {t("restaurantCode")}: {restaurantCode || "--"}
+                    </p>
                     <div className="absolute top-0 right-0">
                         <LanguageSwitcher />
                     </div>
@@ -187,7 +178,7 @@ export default function WaiterPage() {
                                             #{order.id} - {getTableName(order.tableId)}
                                         </h3>
                                         <p className="text-xs text-gray-500">
-                                            {new Date(order.createdAt).toLocaleTimeString("vi-VN")}
+                                            {new Date(order.createdAt).toLocaleTimeString()}
                                         </p>
                                     </div>
                                     <span
@@ -195,7 +186,7 @@ export default function WaiterPage() {
                                             statusTone[order.status]
                                         }`}
                                     >
-                                        {statusLabel[order.status]}
+                                        {tOrder(`status.${order.status}`) || order.status}
                                     </span>
                                 </div>
 
@@ -232,7 +223,7 @@ export default function WaiterPage() {
                                             disabled={updateStatusMutation.isPending}
                                             className="flex-1 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-green-700 disabled:opacity-50"
                                         >
-                                            ✅ {t("confirmOrder")}
+                                            {t("confirmOrder")}
                                         </button>
                                     )}
                                     {order.status === "READY" && (

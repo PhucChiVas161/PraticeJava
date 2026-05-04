@@ -75,3 +75,15 @@ export async function apiPut<T, B>(path: string, body: B): Promise<T> {
 
     return (await response.json()) as T;
 }
+
+export async function apiDelete<T>(path: string): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error(await parseError(response));
+    }
+
+    return (await response.json()) as T;
+}

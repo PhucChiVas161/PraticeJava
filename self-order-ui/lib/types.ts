@@ -4,6 +4,7 @@ export type MenuItem = {
     description?: string | null;
     price: string | number;
     available: boolean;
+    categoryId?: number;
 };
 
 export type MenuCategory = {
@@ -59,7 +60,7 @@ export type CreateOrderRequest = {
     items: CreateOrderItemRequest[];
 };
 
-export type CallRequestType = "CALL" | "PAY";
+export type CallRequestType = "CALL" | "PAY" | "WATER";
 
 export type CallResponse = {
     id: number;

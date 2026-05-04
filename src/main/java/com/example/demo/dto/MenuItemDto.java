@@ -7,5 +7,6 @@ public record MenuItemDto(
         String name,
         String description,
         BigDecimal price,
+        Long categoryId,
         boolean available) {
 }

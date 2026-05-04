@@ -36,12 +36,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 👇 FIX CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers(
                                 "/auth/**",
                                 "/menu/**",
+                                "/menu-item/**",
+                                "/menu-category/**",
                                 "/orders/**",
                                 "/call/**",
                                 "/ws/**",

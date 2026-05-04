@@ -5,10 +5,10 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Home() {
     const t = useTranslations("nav");
-    const tCommon = useTranslations("common");
     const tOrder = useTranslations("order");
     const tKitchen = useTranslations("kitchen");
-    const tAdmin = useTranslations("admin");
+    const tHome = useTranslations("home");
+    const tWaiter = useTranslations("waiter");
 
     const locale = useLocale();
 
@@ -20,23 +20,18 @@ export default function Home() {
             <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-10 px-6 py-12">
                 <header className="flex flex-col gap-6">
                     <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#f1c9b0] bg-white px-3 py-1 text-xs uppercase tracking-[0.2em] text-[#6b5f57]">
-                        Self-order suite
+                        {tHome("suite")}
                     </span>
                     <h1 className="font-display text-4xl leading-tight text-[#1b1a17] sm:text-5xl">
-                        Craft a table-side experience that feels effortless.
+                        {tHome("welcome")}
                     </h1>
-                    <p className="max-w-2xl text-base leading-7 text-[#6b5f57]">
-                        A mobile-first ordering flow that keeps customers in control while the kitchen stays in sync.
-                        Jump into the demo views below to see the customer, kitchen, and admin dashboards.
-                    </p>
+                    <p className="max-w-2xl text-base leading-7 text-[#6b5f57]">{tHome("discover")}</p>
                 </header>
 
                 <section className="grid gap-4 md:grid-cols-3">
                     <div className="glass-panel flex flex-col gap-4 rounded-2xl p-6 shadow-sm">
                         <h2 className="font-display text-xl">{t("order")}</h2>
-                        <p className="text-sm text-[#6b5f57]">
-                            Scan a QR, browse the menu, and send orders straight to the kitchen.
-                        </p>
+                        <p className="text-sm text-[#6b5f57]">{tHome("qr")}</p>
                         <Link
                             className="mt-auto inline-flex items-center justify-center rounded-full bg-[#ff6b35] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-95"
                             href={`/${locale}/order?restaurantCode=ABC123&tableId=1`}
@@ -47,9 +42,7 @@ export default function Home() {
 
                     <div className="glass-panel flex flex-col gap-4 rounded-2xl p-6 shadow-sm">
                         <h2 className="font-display text-xl">{t("kitchen")}</h2>
-                        <p className="text-sm text-[#6b5f57]">
-                            See incoming tickets in real time and move them through prep.
-                        </p>
+                        <p className="text-sm text-[#6b5f57]">{tHome("realtime")}</p>
                         <Link
                             className="mt-auto inline-flex items-center justify-center rounded-full border border-[#1b1a17] px-4 py-2 text-sm font-semibold text-[#1b1a17] transition hover:bg-[#1b1a17] hover:text-white"
                             href={`/${locale}/kitchen?restaurantCode=ABC123`}
@@ -59,10 +52,19 @@ export default function Home() {
                     </div>
 
                     <div className="glass-panel flex flex-col gap-4 rounded-2xl p-6 shadow-sm">
+                        <h2 className="font-display text-xl">{t("waiter")}</h2>
+                        <p className="text-sm text-[#6b5f57]">{tHome("realtime")}</p>
+                        <Link
+                            className="mt-auto inline-flex items-center justify-center rounded-full border border-[#1b1a17] px-4 py-2 text-sm font-semibold text-[#1b1a17] transition hover:bg-[#1b1a17] hover:text-white"
+                            href={`/${locale}/waiter?restaurantCode=ABC123`}
+                        >
+                            {tWaiter("title")}
+                        </Link>
+                    </div>
+
+                    <div className="glass-panel flex flex-col gap-4 rounded-2xl p-6 shadow-sm">
                         <h2 className="font-display text-xl">{t("admin")}</h2>
-                        <p className="text-sm text-[#6b5f57]">
-                            Manage menus, tables, and operational insights in one place.
-                        </p>
+                        <p className="text-sm text-[#6b5f57]">{tHome("management")}</p>
                         <Link
                             className="mt-auto inline-flex items-center justify-center rounded-full border border-[#265d97] px-4 py-2 text-sm font-semibold text-[#265d97] transition hover:bg-[#265d97] hover:text-white"
                             href={`/${locale}/admin?restaurantCode=ABC123`}
@@ -74,17 +76,12 @@ export default function Home() {
 
                 <section className="grid gap-4 md:grid-cols-[1.4fr_1fr]">
                     <div className="glass-panel flex flex-col gap-3 rounded-2xl p-6">
-                        <h3 className="font-display text-lg">Realtime workflow</h3>
-                        <p className="text-sm text-[#6b5f57]">
-                            Orders stream through WebSockets so updates arrive instantly to the kitchen and back to the
-                            table. The status ladder keeps every step accountable.
-                        </p>
+                        <h3 className="font-display text-lg">{tHome("workflow")}</h3>
+                        <p className="text-sm text-[#6b5f57]">{tHome("workflowDescription")}</p>
                     </div>
                     <div className="glass-panel flex flex-col gap-3 rounded-2xl p-6">
-                        <h3 className="font-display text-lg">Ready for multi-tenant</h3>
-                        <p className="text-sm text-[#6b5f57]">
-                            Restaurant codes scope every menu, table, and order so each venue stays fully isolated.
-                        </p>
+                        <h3 className="font-display text-lg">{tHome("multiTenant")}</h3>
+                        <p className="text-sm text-[#6b5f57]">{tHome("multiTenantDescription")}</p>
                     </div>
                 </section>
             </main>

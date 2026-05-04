@@ -52,6 +52,9 @@ export default function KitchenPage() {
     const restaurantCode = searchParams.get("restaurantCode") ?? "";
     const t = useTranslations("kitchen");
     const tOrder = useTranslations("order");
+    const tCommon = useTranslations("common");
+
+    const statusTextMap = tOrder("status") as unknown as Record<OrderStatus, string>;
 
     const [orders, setOrders] = useState<OrderResponse[]>([]);
 
@@ -107,22 +110,20 @@ export default function KitchenPage() {
         <div className="page-gradient flex min-h-screen flex-col">
             <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-6 py-10">
                 <header className="flex flex-col gap-2 relative">
-                    <span className="text-xs uppercase tracking-[0.3em] text-[#6b5f57]">Kitchen console</span>
+                    <span className="text-xs uppercase tracking-[0.3em] text-[#6b5f57]">{t("subtitle")}</span>
                     <h1 className="font-display text-3xl text-[#1b1a17]">{t("title")}</h1>
-                    <p className="text-sm text-[#6b5f57]">{t("restaurantCode")}: {restaurantCode || "--"}</p>
+                    <p className="text-sm text-[#6b5f57]">
+                        {t("restaurantCode")}: {restaurantCode || "--"}
+                    </p>
                     <div className="absolute top-0 right-0">
                         <LanguageSwitcher />
                     </div>
                 </header>
 
                 {!restaurantCode ? (
-                    <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">
-                        {t("addRestaurantCode")}
-                    </div>
+                    <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">{t("addRestaurantCode")}</div>
                 ) : menuQuery.isLoading ? (
-                    <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">
-                        {t("connecting")}
-                    </div>
+                    <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">{t("connecting")}</div>
                 ) : menuQuery.error ? (
                     <div className="glass-panel rounded-2xl border border-red-200 p-6 text-sm text-red-700">
                         {menuQuery.error instanceof Error ? menuQuery.error.message : t("unableToConnect")}
@@ -130,9 +131,7 @@ export default function KitchenPage() {
                 ) : (
                     <div className="grid gap-4 lg:grid-cols-2">
                         {sortedOrders.length === 0 ? (
-                            <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">
-                                Waiting for new orders. The feed will populate as soon as a customer places an order.
-                            </div>
+                            <div className="glass-panel rounded-2xl p-6 text-sm text-[#6b5f57]">{t("waiting")}</div>
                         ) : (
                             sortedOrders.map((order) => {
                                 const nextStatus = nextStatusMap[order.status];
@@ -140,9 +139,12 @@ export default function KitchenPage() {
                                     <div key={order.id} className="glass-panel rounded-2xl p-5">
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <h2 className="font-display text-xl">Order #{order.id}</h2>
+                                                <h2 className="font-display text-xl">
+                                                    {tOrder("title")} #{order.id}
+                                                </h2>
                                                 <p className="text-xs text-[#6b5f57]">
-                                                    Bàn {order.tableId} • {order.items.length} món
+                                                    {t("table")} {order.tableId} • {order.items.length}{" "}
+                                                    {t("items").toLowerCase()}
                                                 </p>
                                             </div>
                                             <span
@@ -150,7 +152,7 @@ export default function KitchenPage() {
                                                     statusTone[order.status]
                                                 }`}
                                             >
-                                                {statusLabel[order.status] || order.status}
+                                                {statusTextMap[order.status] || order.status}
                                             </span>
                                         </div>
 
@@ -161,7 +163,7 @@ export default function KitchenPage() {
                                                         {item.quantity}x {item.name}
                                                     </span>
                                                     <span className="text-xs text-[#6b5f57]">
-                                                        {item.status ?? "NEW"}
+                                                        {item.status ?? statusTextMap["NEW"]}
                                                     </span>
                                                 </div>
                                             ))}
@@ -169,7 +171,7 @@ export default function KitchenPage() {
 
                                         <div className="mt-4 flex items-center justify-between">
                                             <span className="text-xs text-[#6b5f57]">
-                                                Tổng {formatMoney(order.totalAmount)}
+                                                {t("total")}: {formatMoney(order.totalAmount)}
                                             </span>
                                             {nextStatus ? (
                                                 <button
@@ -182,10 +184,11 @@ export default function KitchenPage() {
                                                     }
                                                     disabled={updateStatusMutation.isPending}
                                                 >
-                                                    Chuyển sang {statusLabel[nextStatus] || nextStatus}
+                                                    {t("moveTo")}{" "}
+                                                    {statusTextMap[nextStatus as OrderStatus] || nextStatus}
                                                 </button>
                                             ) : (
-                                                <span className="text-xs text-[#6b5f57]">Đã khóa trạng thái</span>
+                                                <span className="text-xs text-[#6b5f57]">{t("statusLocked")}</span>
                                             )}
                                         </div>
                                     </div>

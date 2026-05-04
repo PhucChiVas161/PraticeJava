@@ -203,13 +203,13 @@ public class OrderService {
 
         Map<Long, Integer> requestedItems = new HashMap<>();
         for (CreateOrderItemRequest item : request.items()) {
-            requestedItems.merge(item.menuItemId(), item.quantity(), Integer::sum);
+            requestedItems.merge(item.menuItemId(), item.quantity(), (a, b) -> a + b);
         }
 
         List<OrderItem> lastOrderItems = orderItemRepository.findByOrderId(lastOrder.getId());
         Map<Long, Integer> previousItems = new HashMap<>();
         for (OrderItem item : lastOrderItems) {
-            previousItems.merge(item.getMenuItem().getId(), item.getQuantity(), Integer::sum);
+            previousItems.merge(item.getMenuItem().getId(), item.getQuantity(), (a, b) -> a + b);
         }
 
         if (requestedItems.equals(previousItems)) {
