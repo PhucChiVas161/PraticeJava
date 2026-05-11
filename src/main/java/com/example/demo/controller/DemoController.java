@@ -145,7 +145,6 @@ public class DemoController {
     }
 
     // Initialize Demo Data
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/init-demo-data")
     public ResponseEntity<Map<String, Object>> initDemoData() {
         demoServices.initializeDemoData();
