@@ -2,7 +2,7 @@
 FROM eclipse-temurin:25-jdk AS builder
 WORKDIR /app
 
-# Copy the Gradle wrapper and configuration files
+# Copy the Gradle wrapper and configuration files hehe
 COPY gradlew .
 COPY gradle/ gradle/
 COPY build.gradle .
